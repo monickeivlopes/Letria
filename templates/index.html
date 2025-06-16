@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letria - Feed de Poemas</title>
+  <link rel="stylesheet" href="../styles/styles.css">
+
+</head>
+<body>
+  <!-- criar -->
+  <header>
+    <nav>
+      <div class="logo">Letria</div>
+      <button class="btn-escrever" onclick="mostrarEditor()">+ Escrever</button>
+    </nav>
+  </header>
+
+  <!-- parte dos Poemas -->
+  <section class="feed">
+    <div class="poema-card">
+      <h3>Noite Estrelada</h3>
+      <p class="autor">Por Maria Silva</p>
+      <p class="conteudo">A lua dança com as sombras, enquanto o vento sussurra segredos antigos aos ouvidos da noite...</p>
+      <a href="#" class="ler-mais">Ler mais →</a>
+    </div>
+    <div class="poema-card">
+      <h3>Café da Manhã</h3>
+      <p class="autor">Por João Lima</p>
+      <p class="conteudo">O aroma do café invade a cozinha, misturando-se ao calor do pão fresco e à luz do amanhecer...</p>
+      <a href="#" class="ler-mais">Ler mais →</a>
+    </div>
+  </section>
+
+  <!-- Edição de texto -->
+  <section class="editor-container" id="editor">
+    <div class="editor-toolbar">
+      <button title="Negrito">B</button>
+      <button title="Itálico">I</button>
+      <button title="Título">T</button>
+    </div>
+    <textarea class="editor-textarea" placeholder="Escreva seu poema aqui..."></textarea>
+    <div class="editor-acoes">
+      <button onclick="ocultarEditor()">Cancelar</button>
+      <button class="btn-salvar">Publicar</button>
+    </div>
+  </section>
+
+  <script>
+   
+    function mostrarEditor() {
+      document.getElementById('editor').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function ocultarEditor() {
+      document.getElementById('editor').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
