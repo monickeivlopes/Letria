@@ -1,0 +1,141 @@
+
+    :root {
+      --lilas: #9D7AD4;
+      --lilas-claro: #E2D4F0;
+      --cinza: #F5F5F5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    body {
+      background-color: #FFFFFF;
+      color: #333333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: white;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-weight: bold;
+      color: var(--lilas);
+      font-size: 1.5rem;
+    }
+    .btn-escrever {
+      background-color: var(--lilas);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-escrever:hover {
+      background-color: #8A6BBE;
+    }
+
+ 
+    .feed {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .poema-card {
+      background-color: var(--lilas-claro);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .poema-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(157, 122, 212, 0.2);
+    }
+    .poema-card h3 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .poema-card .autor {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .poema-card .conteudo {
+      margin: 1rem 0;
+      color: #333;
+    }
+    .poema-card .ler-mais {
+      color: var(--lilas);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+
+    .editor-container {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 1rem;
+      display: none; 
+    }
+    .editor-toolbar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .editor-toolbar button {
+      background: white;
+      border: 1px solid var(--cinza);
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .editor-toolbar button:hover {
+      background: var(--cinza);
+    }
+    .editor-textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 1rem;
+      border: 1px solid var(--cinza);
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .editor-acoes {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    .btn-salvar {
+      background-color: var(--lilas);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .feed {
+        grid-template-columns: 1fr;
+      }
+    }
