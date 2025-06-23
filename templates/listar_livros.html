@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Listar Livros</title>
+</head>
+<body>
+    <h1>Lista de Livros</h1>
+    <ul id="lista-livros"></ul>
+
+    <script>
+        async function carregarLivros() {
+            const res = await fetch("/livros/");
+            const livros = await res.json();
+            const lista = document.getElementById("lista-livros");
+            livros.forEach(livro => {
+                const li = document.createElement("li");
+                li.innerText = `${livro.titulo} (${livro.ano_publicacao})`;
+                lista.appendChild(li);
+            });
+        }
+
+        carregarLivros();
+    </script>
+</body>
+</html>
