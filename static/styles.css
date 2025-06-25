@@ -134,8 +134,49 @@
       cursor: pointer;
     }
 
-    @media (max-width: 768px) {
-      .feed {
-        grid-template-columns: 1fr;
-      }
-    }
+
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form#form-livro {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form#form-livro input,
+form#form-livro textarea,
+form#form-livro button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+form#form-livro input:focus,
+form#form-livro textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+form#form-livro button {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form#form-livro button:hover {
+    background-color: #0056b3;
+}

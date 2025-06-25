@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Entrar / Cadastrar</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="form-container">
+    <h2>Entrar</h2>
+    <form method="post" action="/login">
+      <input type="email" name="email" placeholder="E-mail" required>
+      <input type="password" name="senha" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <hr>
+
+    <h2>Cadastrar</h2>
+    <form method="post" action="/registro">
+      <input type="text" name="nome" placeholder="Nome completo" required>
+      <input type="email" name="email" placeholder="E-mail" required>
+      <input type="password" name="senha" placeholder="Senha" required>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </main>
+</body>
+</html>

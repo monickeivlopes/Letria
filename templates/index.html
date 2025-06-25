@@ -1,20 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Catálogo de Livros</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <title>Catálogo de Livros</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-    <h1>📚 Catálogo de Livros com Resenhas</h1>
-    <p>Bem-vindo(a)! Escolha uma das opções abaixo:</p>
-
+  <header>
+    <h1>Biblioteca Digital</h1>
     <nav>
-        <ul>
-            <li><a href="/cadastrar">Cadastrar novo livro</a></li>
-            <li><a href="/listar">Listar livros</a></li>
-            <li><a href="/buscar">Buscar livros</a></li>
-        </ul>
+      <a href="/">Início</a>
+      <a href="/usuario">Cadastrar / Login</a>
     </nav>
+  </header>
+
+  <main>
+    <h2>Livros Disponíveis</h2>
+
+    <form method="get" action="/">
+      <input type="text" name="busca" placeholder="Buscar por título, autor ou gênero">
+      <button type="submit">Buscar</button>
+    </form>
+
+    <section id="lista-livros">
+      <!-- Lista dinâmica de livros renderizada pelo Jinja2 -->
+      {% for livro in livros %}
+        <div class="livro">
+          <img src="{{ livro.capa_url or '/static/capa_padrao.jpg' }}" alt="Capa do livro" />
+          <h3>{{ livro.titulo }}</h3>
+          <p><strong>Autor:</strong> {{ livro.autor.nome }}</p>
+          <p><strong>Gênero:</strong> {{ livro.genero }}</p>
+          <p>{{ livro.descricao }}</p>
+        </div>
+      {% else %}
+        <p>Nenhum livro encontrado.</p>
+      {% endfor %}
+    </section>
+  </main>
+    {% if sucesso %}
+        <div class="alert-sucesso">
+            Livro cadastrado com sucesso!
+        </div>
+    {% endif %}
+
 </body>
 </html>

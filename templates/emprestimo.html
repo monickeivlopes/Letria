@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Realizar Empréstimo</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>Realizar Empréstimo de Livro</h1>
+  <section>
+    <input id="usuario" placeholder="UUID do Usuário">
+    <input id="livro" placeholder="UUID do Livro">
+    <input id="data-emprestimo" type="date" placeholder="Data do Empréstimo">
+    <input id="data-devolucao" type="date" placeholder="Data da Devolução">
+    <button onclick="emprestar()">Emprestar</button>
+    <textarea readonly id="saida"></textarea>
+  </section>
+
+  <script>
+    async function emprestar() {
+      const usuario = document.getElementById("usuario").value;
+      const livro = document.getElementById("livro").value;
+      const emprestimo = document.getElementById("data-emprestimo").value;
+      const devolucao = document.getElementById("data-devolucao").value;
+
+      const r = await fetch(`http://localhost:8000/emprestimo?usuario=${usuario}&livro=${livro}&data_emprestimo=${emprestimo}&data_devolucao=${devolucao}`, {
+        method: "POST"
+      });
+
+      const resposta = await r.text();
+      document.getElementById("saida").value = resposta;
+    }
+  </script>
+</body>
+</html>

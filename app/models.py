@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
@@ -26,7 +26,6 @@ class Autor(Base):
 
     livros = relationship("Livro", back_populates="autor")
 
-
 class Livro(Base):
     __tablename__ = "livros"
 
@@ -37,9 +36,11 @@ class Livro(Base):
     genero = Column(String)
     capa_url = Column(String)
     autor_id = Column(Integer, ForeignKey("autores.id"))
+    disponibilidade = Column(Boolean, default=True)  # ← adicione esta linha
 
     autor = relationship("Autor", back_populates="livros")
     resenhas = relationship("Resenha", back_populates="livro")
+
 
 
 class Resenha(Base):

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Área do Usuário</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #001F87;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background-color: #0033cc;
+    }
+  </style>
+</head>
+<body>
+  <main style="text-align: center; padding: 50px;">
+    <h2>Bem-vindo à sua área restrita!</h2>
+
+    <a href="/cadastro_livro" class="btn">Cadastrar Novo Livro</a>
+    <a href="/" class="btn">Ver Lista de Livros</a>
+    <a href="/logout" class="btn">Sair</a>
+  </main>
+</body>
+</html>
