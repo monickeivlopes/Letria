@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Autor</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    form {
+      max-width: 500px;
+      margin: auto;
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    .msg {
+      text-align: center;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #2c3e50;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .nav-links a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+    }
+    input, textarea, select, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
+        <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/cadastro_livro">Cadastrar Livro</a>
+        <a href="/cadastrar_autor">Cadastrar Autor</a>
+        <a href="/emprestimo">Empréstimo</a>
+        <a href="/logout">Sair da Conta</a>
+        </nav>
+  </header>
+  <main>
+    <h2 style="text-align: center;">Cadastrar Novo Autor</h2>
+
+    <form id="formAutor">
+      <input type="text" name="nome" placeholder="Nome do autor" required>
+      <button type="submit">Cadastrar Autor</button>
+    </form>
+
+    <p id="mensagem" class="msg"></p>
+  </main>
+
+  <script>
+    const form = document.getElementById('formAutor');
+    const mensagem = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("/autores/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          mensagem.textContent = "Autor cadastrado com sucesso!";
+          mensagem.className = "msg success";
+          form.reset();
+        } else {
+          const erro = await response.json();
+          mensagem.textContent = "Erro: " + (erro.detail || "Não foi possível cadastrar.");
+          mensagem.className = "msg error";
+        }
+      } catch (err) {
+        mensagem.textContent = "Erro na requisição.";
+        mensagem.className = "msg error";
+      }
+    });
+  </script>
+</body>
+</html>

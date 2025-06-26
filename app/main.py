@@ -127,3 +127,7 @@ def cadastro_livro(request: Request, db: Session = Depends(get_db)):
     autores = db.query(models.Autor).all()
     return templates.TemplateResponse("cadastro_livro.html", {"request": request, "autores": autores})
 
+@app.get("/cadastrar_autor", response_class=HTMLResponse)
+def cadastrar_autor(request: Request):
+    return templates.TemplateResponse("cadastrar_autor.html", {"request": request})
+

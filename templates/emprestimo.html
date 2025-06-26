@@ -3,32 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <title>Realizar Empréstimo</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #2c3e50;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .nav-links a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    form, section {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    .msg {
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    .emprestimo-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .emprestimo-card button {
+      margin-right: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Realizar Empréstimo de Livro</h1>
+
+  <header>
+    <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
+    <nav class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/cadastro_livro">Cadastrar Livro</a>
+      <a href="/cadastrar_autor">Cadastrar Autor</a>
+      <a href="/emprestimo">Empréstimo</a>
+      <a href="/logout">Sair da Conta</a>
+    </nav>
+  </header>
+
+  <h1 style="text-align:center">Realizar Empréstimo de Livro</h1>
   <section>
-    <input id="usuario" placeholder="UUID do Usuário">
-    <input id="livro" placeholder="UUID do Livro">
+    <select id="livroSelect" required></select>
     <input id="data-emprestimo" type="date" placeholder="Data do Empréstimo">
-    <input id="data-devolucao" type="date" placeholder="Data da Devolução">
+    <input id="data-devolucao" type="date" placeholder="Data da Devolução" readonly>
     <button onclick="emprestar()">Emprestar</button>
-    <textarea readonly id="saida"></textarea>
+    <p class="msg" id="mensagem"></p>
+  </section>
+
+  <section>
+    <h2>Empréstimos Realizados</h2>
+    <div id="lista-emprestimos"></div>
   </section>
 
   <script>
-    async function emprestar() {
-      const usuario = document.getElementById("usuario").value;
-      const livro = document.getElementById("livro").value;
-      const emprestimo = document.getElementById("data-emprestimo").value;
-      const devolucao = document.getElementById("data-devolucao").value;
+    const livroSelect = document.getElementById("livroSelect");
+    const dataEmprestimo = document.getElementById("data-emprestimo");
+    const dataDevolucao = document.getElementById("data-devolucao");
+    const mensagem = document.getElementById("mensagem");
 
-      const r = await fetch(`http://localhost:8000/emprestimo?usuario=${usuario}&livro=${livro}&data_emprestimo=${emprestimo}&data_devolucao=${devolucao}`, {
+    async function carregarLivrosDisponiveis() {
+      const r = await fetch("/livros");
+      const livros = await r.json();
+      livros.forEach(livro => {
+        const opt = document.createElement("option");
+        opt.value = livro.id;
+        opt.textContent = livro.titulo;
+        livroSelect.appendChild(opt);
+      });
+    }
+
+    function calcularDevolucao() {
+      const data = new Date(dataEmprestimo.value);
+      data.setDate(data.getDate() + 20);
+      dataDevolucao.value = data.toISOString().split('T')[0];
+    }
+
+    async function emprestar() {
+      const livro = livroSelect.value;
+      const emprestimo = dataEmprestimo.value;
+      const devolucao = dataDevolucao.value;
+
+      const r = await fetch(`/emprestimo?livro=${livro}&data_emprestimo=${emprestimo}&data_devolucao=${devolucao}`, {
         method: "POST"
       });
 
       const resposta = await r.text();
-      document.getElementById("saida").value = resposta;
+      mensagem.textContent = resposta;
+      carregarEmprestimos();
+    }
+
+    async function carregarEmprestimos() {
+      const div = document.getElementById("lista-emprestimos");
+      div.innerHTML = "";
+      const r = await fetch("/emprestimos");
+      const lista = await r.json();
+
+      lista.forEach(e => {
+        const card = document.createElement("div");
+        card.className = "emprestimo-card";
+
+        const devolucao = new Date(e.data_devolucao);
+        const hoje = new Date();
+        const diasRestantes = Math.ceil((devolucao - hoje) / (1000 * 60 * 60 * 24));
+
+        card.innerHTML = `
+          <strong>${e.livro.titulo}</strong><br>
+          Usuário: ${e.usuario.nome}<br>
+          Devolve em: ${diasRestantes} dia(s)
+        `;
+
+        if (e.eh_do_usuario_logado) {
+          const cancelar = document.createElement("button");
+          cancelar.textContent = "Cancelar";
+          cancelar.onclick = () => cancelarEmprestimo(e.id);
+
+          const editar = document.createElement("button");
+          editar.textContent = "Editar";
+          editar.onclick = () => editarEmprestimo(e.id);
+
+          card.appendChild(document.createElement("br"));
+          card.appendChild(cancelar);
+          card.appendChild(editar);
+        }
+
+        div.appendChild(card);
+      });
+    }
+
+    function cancelarEmprestimo(id) {
+      fetch(`/emprestimo/${id}`, { method: "DELETE" }).then(() => carregarEmprestimos());
+    }
+
+    function editarEmprestimo(id) {
+      const novaData = prompt("Nova data de devolução (YYYY-MM-DD):");
+      if (novaData) {
+        fetch(`/emprestimo/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nova_data_devolucao: novaData })
+        }).then(() => carregarEmprestimos());
+      }
+    }
+
+    dataEmprestimo.addEventListener("change", calcularDevolucao);
+    window.onload = () => {
+      carregarLivrosDisponiveis();
+      carregarEmprestimos();
     }
   </script>
 </body>

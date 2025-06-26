@@ -3,8 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Cadastrar Livro</title>
-  <link rel="stylesheet" href="/static/style.css">
   <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background-color: #2c3e50;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .nav-links a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
     form {
       max-width: 600px;
       margin: auto;
@@ -26,19 +46,39 @@
   </style>
 </head>
 <body>
+  <header>
+    <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
+    <nav class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/cadastro_livro">Cadastrar Livro</a>
+      <a href="/cadastrar_autor">Cadastrar Autor</a>
+      <a href="/emprestimo">Empréstimo</a>
+      <a href="/logout">Sair da Conta</a>
+    </nav>
+  </header>
+
   <main>
     <h2 style="text-align: center;">Cadastrar Novo Livro</h2>
 
     <form id="formLivro">
       <input type="text" name="titulo" placeholder="Título" required>
-      <input type="text" name="genero" placeholder="Gênero">
+      <select name="genero" required>
+        <option value="fantasia">Fantasia</option>
+        <option value="terror">Terror</option>
+        <option value="comedia">Comédia</option>
+        <option value="romance">Romance</option>
+        <option value="ficcao">Ficção Científica</option>
+        <option value="drama">Drama</option>
+        <option value="aventura">Aventura</option>
+        <option value="suspense">Suspense</option>
+        <option value="biografia">Biografia</option>
+        <option value="outro">Outro</option>
+      </select>
       <input type="number" name="ano_publicacao" placeholder="Ano de Publicação">
       <textarea name="descricao" placeholder="Descrição do livro"></textarea>
       <input type="text" name="capa_url" placeholder="URL da capa">
-      <select name="autor_id" required>
-        {% for autor in autores %}
-          <option value="{{ autor.id }}">{{ autor.nome }}</option>
-        {% endfor %}
+      <select name="autor_id" id="autor_id" required>
+        <!-- autores serão carregados via JS -->
       </select>
       <button type="submit">Cadastrar Livro</button>
     </form>
@@ -50,13 +90,31 @@
     const form = document.getElementById('formLivro');
     const mensagem = document.getElementById('mensagem');
 
+    async function carregarAutores() {
+      try {
+        const response = await fetch("/autores");
+        if (!response.ok) throw new Error("Erro ao carregar autores.");
+        const autores = await response.json();
+
+        const select = document.getElementById("autor_id");
+        autores.forEach(autor => {
+          const option = document.createElement("option");
+          option.value = autor.id;
+          option.textContent = autor.nome;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        mensagem.textContent = "Erro ao carregar autores.";
+        mensagem.classList.add("error");
+      }
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Convert fields properly
       data.ano_publicacao = data.ano_publicacao ? parseInt(data.ano_publicacao) : null;
       data.autor_id = parseInt(data.autor_id);
       data.disponibilidade = true;
@@ -84,6 +142,8 @@
         mensagem.classList.add("error");
       }
     });
+
+    window.onload = carregarAutores;
   </script>
 </body>
 </html>
