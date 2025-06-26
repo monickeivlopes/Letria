@@ -2,84 +2,175 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Realizar Empréstimo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+    :root {
+      --cor-primaria: #4B3F72;
+      --cor-secundaria: #D9D4E7;
+      --cor-fundo: #FDFDFD;
+      --cor-texto: #333333;
+      --cor-botao: #6C5B7B;
+      --cor-botao-hover: #5A4E69;
+
+      --fonte-titulo: 'Playfair Display', serif;
+      --fonte-texto: 'Inter', sans-serif;
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--fonte-texto);
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+    }
+
     header {
-      background-color: #2c3e50;
-      padding: 15px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .conteudo-cabecalho {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
+      padding: 0 1rem;
     }
+
+    .logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.8rem;
+      color: var(--cor-primaria);
+    }
+
     .nav-links a {
-      color: white;
-      margin: 0 10px;
+      margin-left: 1rem;
       text-decoration: none;
-      font-weight: bold;
+      color: var(--cor-texto);
+      font-weight: 500;
+      transition: color 0.3s;
     }
+
     .nav-links a:hover {
-      text-decoration: underline;
+      color: var(--cor-primaria);
     }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-family: var(--fonte-titulo);
+      color: var(--cor-primaria);
+    }
+
     form, section {
-      max-width: 600px;
-      margin: 20px auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
     }
+
     input, select, button {
-      display: block;
       width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
     }
+
+    button {
+      background-color: var(--cor-botao);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--cor-botao-hover);
+    }
+
     .msg {
       text-align: center;
       font-weight: bold;
       color: green;
     }
+
     .error {
       color: red;
     }
+
     .emprestimo-card {
       border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: var(--cor-secundaria);
+      margin-bottom: 1rem;
     }
+
     .emprestimo-card button {
-      margin-right: 5px;
+      background-color: #ccc;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .emprestimo-card button:hover {
+      background-color: #bbb;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
-    <nav class="nav-links">
-      <a href="/dashboard">Dashboard</a>
-      <a href="/cadastro_livro">Cadastrar Livro</a>
-      <a href="/cadastrar_autor">Cadastrar Autor</a>
-      <a href="/emprestimo">Empréstimo</a>
-      <a href="/logout">Sair da Conta</a>
-    </nav>
+    <div class="conteudo-cabecalho">
+      <h1 class="logo">Letria - Biblioteca</h1>
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/cadastro_livro">Cadastrar Livro</a>
+        <a href="/cadastrar_autor">Cadastrar Autor</a>
+        <a href="/emprestimo">Empréstimo</a>
+        <a href="/logout">Sair da Conta</a>
+      </nav>
+    </div>
   </header>
 
-  <h1 style="text-align:center">Realizar Empréstimo de Livro</h1>
-  <section>
-    <select id="livroSelect" required></select>
-    <input id="data-emprestimo" type="date" placeholder="Data do Empréstimo">
-    <input id="data-devolucao" type="date" placeholder="Data da Devolução" readonly>
-    <button onclick="emprestar()">Emprestar</button>
-    <p class="msg" id="mensagem"></p>
-  </section>
+  <main>
+    <h1>Realizar Empréstimo de Livro</h1>
+    <section>
+      <select id="livroSelect" required></select>
+      <input id="data-emprestimo" type="date" placeholder="Data do Empréstimo">
+      <input id="data-devolucao" type="date" placeholder="Data da Devolução" readonly>
+      <button onclick="emprestar()">Emprestar</button>
+      <p class="msg" id="mensagem"></p>
+    </section>
 
-  <section>
-    <h2>Empréstimos Realizados</h2>
-    <div id="lista-emprestimos"></div>
-  </section>
+    <section>
+      <h2>Empréstimos Realizados</h2>
+      <div id="lista-emprestimos"></div>
+    </section>
+  </main>
 
   <script>
     const livroSelect = document.getElementById("livroSelect");

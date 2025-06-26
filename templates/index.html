@@ -1,47 +1,243 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Catálogo de Livros</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letria - Biblioteca Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cor-primaria: #4B3F72;
+      --cor-secundaria: #D9D4E7;
+      --cor-fundo: #FDFDFD;
+      --cor-texto: #333333;
+      --cor-botao: #6C5B7B;
+      --cor-botao-hover: #5A4E69;
+
+      --fonte-titulo: 'Playfair Display', serif;
+      --fonte-texto: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--fonte-texto);
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+    }
+
+    .cabecalho {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 0;
+    }
+
+    .conteudo-cabecalho {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.8rem;
+      color: var(--cor-primaria);
+    }
+
+    .navegacao a {
+      margin-left: 1rem;
+      text-decoration: none;
+      color: var(--cor-texto);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navegacao a:hover {
+      color: var(--cor-primaria);
+    }
+
+    .sessao-sobre, .sessao-livros, .sessao-resenhas {
+      padding: 4rem 1rem;
+      background-color: white;
+    }
+
+    .titulo-secao {
+      text-align: center;
+      font-family: var(--fonte-titulo);
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--cor-primaria);
+    }
+
+    .conteudo-centralizado {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .texto-secao {
+      font-size: 1.1rem;
+      text-align: center;
+      color: var(--cor-texto);
+    }
+
+    .grade-livros {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .livro-destacado {
+      background-color: var(--cor-secundaria);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .livro-destacado:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .titulo-livro {
+      font-family: var(--fonte-titulo);
+      color: var(--cor-primaria);
+      font-size: 1.3rem;
+    }
+
+    .autor-livro {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .descricao-livro {
+      margin-bottom: 1rem;
+    }
+
+    .botao-ler-mais {
+      text-decoration: none;
+      background-color: var(--cor-botao);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      display: inline-block;
+    }
+
+    .botao-ler-mais:hover {
+      background-color: var(--cor-botao-hover);
+    }
+
+    .resenha {
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-left: 4px solid var(--cor-primaria);
+      margin-top: 2rem;
+      border-radius: 6px;
+    }
+
+    .titulo-resenha {
+      font-family: var(--fonte-titulo);
+      color: var(--cor-primaria);
+      margin-bottom: 0.5rem;
+    }
+
+    .texto-resenha {
+      margin-bottom: 1rem;
+    }
+
+    .rodape {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      background-color: var(--cor-secundaria);
+      color: #555;
+    }
+
+    .alert-sucesso {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      border: 1px solid #c3e6cb;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Biblioteca Digital</h1>
-    <nav>
-      <a href="/">Início</a>
-      <a href="/usuario">Cadastrar / Login</a>
-    </nav>
+  <header class="cabecalho">
+    <div class="conteudo-cabecalho">
+      <h1 class="logo">Letria</h1>
+      <nav class="navegacao">
+        <a href="/">Início</a>
+        <a href="/usuario"> Cadastrar / Login</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <h2>Livros Disponíveis</h2>
-
-    <form method="get" action="/">
-      <input type="text" name="busca" placeholder="Buscar por título, autor ou gênero">
-      <button type="submit">Buscar</button>
-    </form>
-
-    <section id="lista-livros">
-      <!-- Lista dinâmica de livros renderizada pelo Jinja2 -->
-      {% for livro in livros %}
-        <div class="livro">
-          <img src="{{ livro.capa_url or '/static/capa_padrao.jpg' }}" alt="Capa do livro" />
-          <h3>{{ livro.titulo }}</h3>
-          <p><strong>Autor:</strong> {{ livro.autor.nome }}</p>
-          <p><strong>Gênero:</strong> {{ livro.genero }}</p>
-          <p>{{ livro.descricao }}</p>
-        </div>
-      {% else %}
-        <p>Nenhum livro encontrado.</p>
-      {% endfor %}
+  <main class="conteudo-centralizado">
+    <section id="sobre" class="sessao-sobre">
+      <h2 class="titulo-secao">Sobre o Projeto</h2>
+      <p class="texto-secao">
+        Letria é um espaço para quem ama literatura. Aqui você encontra livros em destaque, resenhas autêuticas e uma comunidade apaixonada por palavras.
+      </p>
     </section>
-  </main>
-    {% if sucesso %}
-        <div class="alert-sucesso">
-            Livro cadastrado com sucesso!
-        </div>
-    {% endif %}
 
+    <section id="destaques" class="sessao-livros">
+      <h2 class="titulo-secao">Livros Disponíveis</h2>
+
+      <form method="get" action="/">
+        <input type="text" name="busca" placeholder="Buscar por título, autor ou gênero">
+        <button type="submit">Buscar</button>
+      </form>
+
+      <section id="lista-livros" class="grade-livros">
+        {% for livro in livros %}
+          <article class="livro-destacado">
+            <img src="{{ livro.capa_url or '/static/capa_padrao.jpg' }}" alt="Capa do livro" />
+            <h3 class="titulo-livro">{{ livro.titulo }}</h3>
+            <p class="autor-livro">Autor: {{ livro.autor.nome }}</p>
+            <p class="descricao-livro">Gênero: {{ livro.genero }}</p>
+            <p class="descricao-livro">{{ livro.descricao }}</p>
+            <a href="#" class="botao-ler-mais">Ler mais</a>
+          </article>
+        {% else %}
+          <p>Nenhum livro encontrado.</p>
+        {% endfor %}
+      </section>
+    </section>
+
+    <section id="resenhas" class="sessao-resenhas">
+      <h2 class="titulo-secao">Resenhas Recentes</h2>
+      <article class="resenha">
+        <h3 class="titulo-resenha">Dom Casmurro e os Olhares de Capitu</h3>
+        <p class="texto-resenha">Uma análise profunda do ciúmes e da confiabilidade da memória em Machado de Assis.</p>
+        <a href="#" class="botao-ler-mais">Ler resenha</a>
+      </article>
+    </section>
+
+    {% if sucesso %}
+      <div class="alert-sucesso">
+        Livro cadastrado com sucesso!
+      </div>
+    {% endif %}
+  </main>
+
+  <footer class="rodape">
+    <p>&copy; 2025 Letria. Todos os direitos reservados.</p>
+  </footer>
 </body>
 </html>

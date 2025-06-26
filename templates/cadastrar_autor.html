@@ -1,80 +1,175 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Cadastrar Autor</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <title>Cadastrar Autor - Letria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet" />
   <style>
-    form {
-      max-width: 500px;
-      margin: auto;
+    :root {
+      --cor-primaria: #4B3F72;
+      --cor-secundaria: #D9D4E7;
+      --cor-fundo: #FDFDFD;
+      --cor-texto: #333333;
+      --cor-botao: #6C5B7B;
+      --cor-botao-hover: #5A4E69;
+
+      --fonte-titulo: 'Playfair Display', serif;
+      --fonte-texto: 'Inter', sans-serif;
     }
-    input, button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-    }
-    .msg {
-      text-align: center;
-      font-weight: bold;
-    }
-    .error {
-      color: red;
-    }
-    .success {
-      color: green;
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: var(--fonte-texto);
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2rem 1rem;
+      width: 100%;
     }
-    header {
-      background-color: #2c3e50;
-      padding: 15px;
+
+    .cabecalho {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 100%;
+    
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      margin-bottom: 2rem;
     }
-    .nav-links a {
-      color: white;
-      margin: 0 10px;
+
+    .logo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.8rem;
+      color: var(--cor-primaria);
+    }
+
+    .navegacao a {
+      margin-left: 1.5rem;
       text-decoration: none;
-      font-weight: bold;
+      color: var(--cor-texto);
+      font-weight: 500;
+      font-family: var(--fonte-texto);
+      transition: color 0.3s;
     }
-    .nav-links a:hover {
+
+    .navegacao a:hover {
+      color: var(--cor-primaria);
       text-decoration: underline;
     }
-    form {
-      max-width: 600px;
-      margin: auto;
-    }
-    input, textarea, select, button {
-      display: block;
+
+    main {
       width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      max-width: 600px;
+      background-color: white;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      font-family: var(--fonte-texto);
+    }
+
+    h2 {
+      font-family: var(--fonte-titulo);
+      font-size: 2rem;
+      color: var(--cor-primaria);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input {
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 1.5px solid var(--cor-secundaria);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: var(--fonte-texto);
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 8px var(--cor-primaria);
+    }
+
+    button {
+      background-color: var(--cor-botao);
+      color: white;
+      border: none;
+      padding: 1rem 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--cor-botao-hover);
+    }
+
+    .msg {
+      margin-top: 1.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .error {
+      color: #b00020;
+    }
+
+    .success {
+      color: #155724;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 1.5rem 2rem;
+      }
+      .cabecalho {
+        padding: 1rem 1.5rem;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-    <header>
-        <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
-        <nav class="nav-links">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/cadastro_livro">Cadastrar Livro</a>
-        <a href="/cadastrar_autor">Cadastrar Autor</a>
-        <a href="/emprestimo">Empréstimo</a>
-        <a href="/logout">Sair da Conta</a>
-        </nav>
+  <header class="cabecalho">
+    <h1 class="logo">Letria</h1>
+    <nav class="navegacao">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/cadastro_livro">Cadastrar Livro</a>
+      <a href="/cadastrar_autor">Cadastrar Autor</a>
+      <a href="/emprestimo">Empréstimo</a>
+      <a href="/logout">Sair da Conta</a>
+    </nav>
   </header>
+
   <main>
-    <h2 style="text-align: center;">Cadastrar Novo Autor</h2>
+    <h2>Cadastrar Novo Autor</h2>
 
     <form id="formAutor">
-      <input type="text" name="nome" placeholder="Nome do autor" required>
+      <input type="text" name="nome" placeholder="Nome do autor" required />
       <button type="submit">Cadastrar Autor</button>
     </form>
 

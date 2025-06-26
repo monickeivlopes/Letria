@@ -1,53 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Cadastrar Livro</title>
+  <meta charset="UTF-8" />
+  <title>Cadastrar Livro - Letria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet" />
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+    :root {
+      --cor-primaria: #4B3F72;
+      --cor-secundaria: #D9D4E7;
+      --cor-fundo: #FDFDFD;
+      --cor-texto: #333333;
+      --cor-botao: #6C5B7B;
+      --cor-botao-hover: #5A4E69;
+
+      --fonte-titulo: 'Playfair Display', serif;
+      --fonte-texto: 'Inter', sans-serif;
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--fonte-texto);
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
     header {
-      background-color: #2c3e50;
-      padding: 15px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
+
+    header h1 {
+      font-family: var(--fonte-titulo);
+      font-size: 1.8rem;
+      color: var(--cor-primaria);
+    }
+
     .nav-links a {
-      color: white;
-      margin: 0 10px;
+      margin-left: 1.5rem;
       text-decoration: none;
-      font-weight: bold;
+      color: var(--cor-texto);
+      font-weight: 600;
+      font-family: var(--fonte-texto);
+      transition: color 0.3s;
     }
+
     .nav-links a:hover {
+      color: var(--cor-primaria);
       text-decoration: underline;
     }
+
+    main {
+      flex-grow: 1;
+      padding: 3rem 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    main h2 {
+      font-family: var(--fonte-titulo);
+      color: var(--cor-primaria);
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
     form {
-      max-width: 600px;
-      margin: auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-family: var(--fonte-texto);
     }
+
     input, textarea, select, button {
-      display: block;
       width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.2rem;
+      border: 1.5px solid var(--cor-secundaria);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: var(--fonte-texto);
+      transition: border-color 0.3s;
     }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--cor-primaria);
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      background-color: var(--cor-botao);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--cor-botao-hover);
+    }
+
     .msg {
       text-align: center;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 1rem;
       color: green;
     }
+
     .error {
-      color: red;
+      color: #b02a37; /* tom vermelho para erro */
     }
   </style>
 </head>
 <body>
   <header>
-    <h1 style="margin: 0; font-size: 1.2rem;">Letria - Biblioteca</h1>
+    <h1>Letria</h1>
     <nav class="nav-links">
       <a href="/dashboard">Dashboard</a>
       <a href="/cadastro_livro">Cadastrar Livro</a>
@@ -58,11 +149,12 @@
   </header>
 
   <main>
-    <h2 style="text-align: center;">Cadastrar Novo Livro</h2>
+    <h2>Cadastrar Novo Livro</h2>
 
     <form id="formLivro">
-      <input type="text" name="titulo" placeholder="Título" required>
+      <input type="text" name="titulo" placeholder="Título" required />
       <select name="genero" required>
+        <option value="" disabled selected>Selecione o gênero</option>
         <option value="fantasia">Fantasia</option>
         <option value="terror">Terror</option>
         <option value="comedia">Comédia</option>
@@ -74,10 +166,11 @@
         <option value="biografia">Biografia</option>
         <option value="outro">Outro</option>
       </select>
-      <input type="number" name="ano_publicacao" placeholder="Ano de Publicação">
+      <input type="number" name="ano_publicacao" placeholder="Ano de Publicação" min="0" />
       <textarea name="descricao" placeholder="Descrição do livro"></textarea>
-      <input type="text" name="capa_url" placeholder="URL da capa">
+      <input type="text" name="capa_url" placeholder="URL da capa" />
       <select name="autor_id" id="autor_id" required>
+        <option value="" disabled selected>Selecione o autor</option>
         <!-- autores serão carregados via JS -->
       </select>
       <button type="submit">Cadastrar Livro</button>
