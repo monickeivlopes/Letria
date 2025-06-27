@@ -6,9 +6,15 @@ from sqlalchemy.orm import Session
 from passlib.hash import bcrypt
 from .. import models
 from ..database import get_db
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from .. import models
+from ..database import get_db
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
+
 
 # Cadastro de novo usuário
 @router.post("/registro")

@@ -175,6 +175,40 @@
       border: 1px solid #c3e6cb;
       border-radius: 5px;
     }
+
+    .form-filtro {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-filtro input[type="text"],
+    .form-filtro select {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      min-width: 220px;
+    }
+
+    .form-filtro button {
+      padding: 0.6rem 1.2rem;
+      background-color: var(--cor-botao);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+.form-filtro button:hover {
+  background-color: var(--cor-botao-hover);
+}
+
   </style>
 </head>
 <body>
@@ -199,20 +233,35 @@
     <section id="destaques" class="sessao-livros">
       <h2 class="titulo-secao">Livros Disponíveis</h2>
 
-      <form method="get" action="/">
-        <input type="text" name="busca" placeholder="Buscar por título, autor ou gênero">
+      <form method="get" action="/" class="form-filtro">
+        <input type="text" name="busca_titulo" placeholder="Buscar por título">
+
+        <select name="genero">
+          <option value="">Todos os Gêneros</option>
+          {% for g in generos %}
+            <option value="{{ g }}" {% if g == genero %}selected{% endif %}>{{ g }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="autor_id">
+          <option value="">Todos os Autores</option>
+          {% for autor in autores %}
+            <option value="{{ autor.id }}" {% if autor.id|string == autor_id %}selected{% endif %}>{{ autor.nome }}</option>
+          {% endfor %}
+        </select>
+
         <button type="submit">Buscar</button>
       </form>
+
 
       <section id="lista-livros" class="grade-livros">
         {% for livro in livros %}
           <article class="livro-destacado">
-            <img src="{{ livro.capa_url or '/static/capa_padrao.jpg' }}" alt="Capa do livro" />
             <h3 class="titulo-livro">{{ livro.titulo }}</h3>
             <p class="autor-livro">Autor: {{ livro.autor.nome }}</p>
             <p class="descricao-livro">Gênero: {{ livro.genero }}</p>
             <p class="descricao-livro">{{ livro.descricao }}</p>
-            <a href="#" class="botao-ler-mais">Ler mais</a>
+            <a href="/emprestimo" class="botao-ler-mais">Pegar Emprestado</a>
           </article>
         {% else %}
           <p>Nenhum livro encontrado.</p>
@@ -220,14 +269,6 @@
       </section>
     </section>
 
-    <section id="resenhas" class="sessao-resenhas">
-      <h2 class="titulo-secao">Resenhas Recentes</h2>
-      <article class="resenha">
-        <h3 class="titulo-resenha">Dom Casmurro e os Olhares de Capitu</h3>
-        <p class="texto-resenha">Uma análise profunda do ciúmes e da confiabilidade da memória em Machado de Assis.</p>
-        <a href="#" class="botao-ler-mais">Ler resenha</a>
-      </article>
-    </section>
 
     {% if sucesso %}
       <div class="alert-sucesso">

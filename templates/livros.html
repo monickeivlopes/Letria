@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Livros Disponíveis - Letria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDFDFD;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #4B3F72;
+      font-size: 1.8rem;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      width: 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      color: #4B3F72;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      margin: 0.25rem 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      font-weight: bold;
+      background-color: #6C5B7B;
+      color: white;
+      margin-top: 0.5rem;
+    }
+
+    .badge.indisponivel {
+      background-color: #b03838;
+    }
+
+    .voltar {
+      display: block;
+      width: fit-content;
+      margin: 1rem auto;
+      padding: 0.5rem 1rem;
+      background-color: #6C5B7B;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .voltar:hover {
+      background-color: #5A4E69;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Livros Cadastrados</h1>
+</header>
+
+<div class="container">
+  <table>
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Ano</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for livro in livros %}
+    <tr>
+      <td>{{ livro.titulo }}</td>
+      <td>{{ livro.ano_publicacao }}</td>
+      <td>
+        <form method="post" action="/livros/{{ livro.id }}/deletar" onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
+          <button type="submit">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</div>
+
+<a href="/dashboard" class="voltar">Voltar ao Dashboard</a>
+
+</body>
+</html>

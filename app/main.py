@@ -8,6 +8,16 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from .routers import auth
+from app.models import Livro, Autor, Usuario
+from fastapi import APIRouter, Request, Form, Depends, HTTPException
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
+from starlette.status import HTTP_302_FOUND
+from sqlalchemy.orm import Session
+from passlib.hash import bcrypt
+from . import models
+from .database import get_db
+from app.routers.dependencies import get_usuario_logado
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -33,13 +43,46 @@ app.add_middleware(
 
 # Montar diretórios de arquivos estáticos e templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
+router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
 
 # Rotas para renderizar páginas HTML
 
-@app.get("/", response_class=HTMLResponse)
-def livros(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/")
+def homepage(
+    request: Request,
+    busca_titulo: str = "",
+    genero: str = "",
+    autor_id: str = "",
+    db: Session = Depends(get_db)
+):
+    query = db.query(Livro)
+
+    if busca_titulo:
+        query = query.filter(Livro.titulo.ilike(f"%{busca_titulo}%"))
+
+    if genero:
+        query = query.filter(Livro.genero == genero)
+
+    if autor_id:
+        query = query.filter(Livro.autor_id == int(autor_id))
+
+    livros = query.order_by(Livro.id.desc()).all()
+
+    # lista distinta de gêneros e autores para os filtros
+    generos = [row[0] for row in db.query(Livro.genero).distinct().all()]
+    autores = db.query(Autor).all()
+
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "livros": livros,
+        "generos": generos,
+        "autores": autores,
+        "genero": genero,
+        "autor_id": autor_id,
+        "sucesso": False
+    })
 
 @app.get("/usuario", response_class=HTMLResponse)
 def usuario(request: Request):
@@ -50,17 +93,7 @@ def emprestimo(request: Request):
     return templates.TemplateResponse("emprestimo.html", {"request": request})
 
 
-from fastapi import APIRouter, Request, Form, Depends, HTTPException
-from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from starlette.status import HTTP_302_FOUND
-from sqlalchemy.orm import Session
-from passlib.hash import bcrypt
-from . import models
-from .database import get_db
 
-router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 # Cadastro de novo usuário
 @router.post("/registro")
@@ -131,3 +164,26 @@ def cadastro_livro(request: Request, db: Session = Depends(get_db)):
 def cadastrar_autor(request: Request):
     return templates.TemplateResponse("cadastrar_autor.html", {"request": request})
 
+@router.get("/livros")
+def livros(request: Request, db: Session = Depends(get_db)):
+    livros = db.query(Livro).all()
+    return templates.TemplateResponse("livros.html", {
+        "request": request,
+        "livros": livros
+    })
+
+@router.post("/livros/{livro_id}/deletar")
+def deletar_livro(
+    livro_id: int,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_logado) 
+):
+    livro = db.query(Livro).filter(Livro.id == livro_id).first()
+
+    if not livro:
+        raise HTTPException(status_code=404, detail="Livro não encontrado")
+
+    db.delete(livro)
+    db.commit()
+
+    return RedirectResponse(url="/livros", status_code=HTTP_302_FOUND)
