@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
-from . import models
-from .database import engine
-from .routers import livros, autores
+from app import models
+from app.database import engine
+from app.routers import livros, autores
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
