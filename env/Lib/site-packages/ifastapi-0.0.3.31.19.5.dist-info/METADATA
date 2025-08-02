@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: ifastapi
+Version: 0.0.3.31.19.5
+Summary: 基于fastapi二次优化 旨在更便捷、快速的搭建API
+Home-page: https://github.com/ifczt/iFastApi
+Author: IFCZT
+Author-email: ifczt@qq.com
+License: MIT
+Requires-Dist: fastapi
+Requires-Dist: sqlalchemy
+Requires-Dist: uvicorn
+Requires-Dist: pymysql
+Requires-Dist: pytz
+Requires-Dist: pyjwt
+Requires-Dist: pandas
+Requires-Dist: requests
+Requires-Dist: aiomysql
+Requires-Dist: pillow
+

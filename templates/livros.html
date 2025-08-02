@@ -4,96 +4,94 @@
   <meta charset="UTF-8">
   <title>Livros Disponíveis - Letria</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #FDFDFD;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+  body {
+  font-family: 'Inter', sans-serif;
+  background-color: #FDFDFD;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
 
-    header {
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+header {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      color: #4B3F72;
-      font-size: 1.8rem;
-    }
+header h1 {
+  font-family: 'Playfair Display', serif;
+  color: #4B3F72;
+  font-size: 1.8rem;
+}
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 2rem;
-      gap: 2rem;
-    }
+.container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-    .card {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      width: 250px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      text-align: center;
-      transition: transform 0.3s;
-    }
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.75rem;
+}
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
+th, td {
+  text-align: left;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 
-    .card h3 {
-      font-size: 1.2rem;
-      color: #4B3F72;
-      margin-bottom: 0.5rem;
-    }
+th {
+  background-color: #f0ebf8;
+  font-weight: 600;
+  color: #4B3F72;
+}
 
-    .card p {
-      font-size: 0.95rem;
-      margin: 0.25rem 0;
-    }
+td form {
+  display: inline;
+}
 
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem;
-      border-radius: 8px;
-      font-weight: bold;
-      background-color: #6C5B7B;
-      color: white;
-      margin-top: 0.5rem;
-    }
+button {
+  background-color: #b03838;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-    .badge.indisponivel {
-      background-color: #b03838;
-    }
+button:hover {
+  background-color: #8c2c2c;
+}
 
-    .voltar {
-      display: block;
-      width: fit-content;
-      margin: 1rem auto;
-      padding: 0.5rem 1rem;
-      background-color: #6C5B7B;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+.voltar {
+  display: block;
+  width: fit-content;
+  margin: 2rem auto 1rem auto;
+  padding: 0.5rem 1rem;
+  background-color: #6C5B7B;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
 
-    .voltar:hover {
-      background-color: #5A4E69;
-    }
-  </style>
+.voltar:hover {
+  background-color: #5A4E69;
+}
+</style>
 </head>
+
 <body>
 
 <header>
@@ -101,6 +99,13 @@
 </header>
 
 <div class="container">
+
+{% if request.query_params.get('sucesso') == 'true' %}
+  <div style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+    Livro excluído com sucesso!
+  </div>
+{% endif %}
+
   <table>
   <thead>
     <tr>

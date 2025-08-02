@@ -132,7 +132,7 @@
     }
 
     .error {
-      color: #b02a37; /* tom vermelho para erro */
+      color: #b02a37; 
     }
   </style>
 </head>
@@ -173,7 +173,10 @@
         <option value="" disabled selected>Selecione o autor</option>
         <!-- autores serão carregados via JS -->
       </select>
-      <button type="submit">Cadastrar Livro</button>
+      {% if usuario.is_admin %}
+        <button><a href="/cadastro_livro">Cadastrar Livro</a></button>
+      {% endif %}
+
     </form>
 
     <p id="mensagem" class="msg"></p>
