@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 
 class AutorBase(BaseModel):
     nome: str
@@ -11,7 +11,7 @@ class Autor(AutorBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True  
 
 
 class LivroBase(BaseModel):
@@ -31,4 +31,4 @@ class Livro(LivroBase):
     autor: Autor
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Atualizado para Pydantic v2
