@@ -77,7 +77,13 @@
       font-family: var(--fonte-titulo);
       color: var(--cor-primaria);
       font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .mensagem {
+      font-size: 1.1rem;
       margin-bottom: 2rem;
+      color: #555;
     }
 
     .btn {
@@ -107,20 +113,19 @@
   <header>
     <h1>Letria</h1>
     <nav class="nav-links">
-      <a href="/">Início</a>
       <a href="/dashboard">Dashboard</a>
-      <a href="/cadastro_livro">Cadastrar Livro</a>
-      <a href="/cadastrar_autor">Cadastrar Autor</a>
       <a href="/emprestimo">Empréstimo</a>
       <a href="/logout">Sair da Conta</a>
     </nav>
   </header>
 
   <main>
-    <h2>Bem-vindo à sua área restrita!</h2>
+    <h2>Bem-vindo, {{ usuario.nome }}!</h2>
+    <p class="mensagem">
+      Aqui você pode consultar nossa lista de livros e solicitar empréstimos. Fique à vontade para explorar nosso acervo!
+    </p>
 
-    <a href="/cadastro_livro" class="btn">Cadastrar Novo Livro</a>
-    <a href="/livros" class="btn">Ver Lista de Livros</a>
+    <a href="/livros_usuario" class="btn">Ver Lista de Livros</a>
   </main>
 
 </body>

@@ -173,9 +173,7 @@
         <option value="" disabled selected>Selecione o autor</option>
         <!-- autores serão carregados via JS -->
       </select>
-      {% if usuario.is_admin %}
-        <button><a href="/cadastro_livro">Cadastrar Livro</a></button>
-      {% endif %}
+      <button onclick="window.location.href='/cadastro_livro'">Cadastrar Livro</button>
 
     </form>
 

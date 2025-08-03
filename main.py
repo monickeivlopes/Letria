@@ -84,13 +84,6 @@ def homepage(
 def usuario(request: Request):
     return templates.TemplateResponse("cadastrar_usuario.html", {"request": request})
 
-@app.get("/emprestimo", response_class=HTMLResponse)
-def emprestimo(request: Request):
-    return templates.TemplateResponse("emprestimo.html", {"request": request})
-
-
-
-
 
 # Cadastro de novo usuário
 @router.post("/registro")
@@ -143,9 +136,20 @@ def logout():
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard(request: Request, usuario: Usuario = Depends(get_usuario_logado)):
     if not usuario.is_admin:
-        return RedirectResponse(url="/", status_code=HTTP_302_FOUND)
+        return RedirectResponse(url="/dashboard_usuario", status_code=HTTP_302_FOUND)
 
     return templates.TemplateResponse("dashboard.html", {"request": request, "usuario": usuario})
+
+@app.get("/dashboard_usuario", response_class=HTMLResponse)
+def dashboard_usuario(
+    request: Request,
+    usuario: Usuario = Depends(get_usuario_logado)
+):
+    return templates.TemplateResponse("dashboard_usuario.html", {
+        "request": request,
+        "usuario": usuario
+    })
+
 
 
 @app.get("/cadastro_livro", response_class=HTMLResponse)
@@ -158,7 +162,12 @@ def cadastro_livro(
         return RedirectResponse(url="/", status_code=HTTP_302_FOUND)
 
     autores = db.query(models.Autor).all()
-    return templates.TemplateResponse("cadastro_livro.html", {"request": request, "autores": autores})
+    return templates.TemplateResponse("cadastro_livro.html", {
+        "request": request,
+        "autores": autores,
+        "usuario": usuario
+    })
+
 
 
 @app.get("/cadastrar_autor", response_class=HTMLResponse)
@@ -201,6 +210,107 @@ def deletar_livro(
     db.commit()
 
     return RedirectResponse(url="/livros?sucesso=true", status_code=HTTP_302_FOUND)
+
+@app.get("/livros_usuario", response_class=HTMLResponse)
+def livros_para_usuario(
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_logado)
+):
+    livros = db.query(Livro).all()
+    return templates.TemplateResponse("livros_usuario.html", {
+        "request": request,
+        "livros": livros,
+        "usuario": usuario
+    })
+
+from fastapi import Body
+from datetime import datetime
+
+@app.get("/emprestimo", response_class=HTMLResponse)
+def pagina_emprestimo(request: Request, usuario: Usuario = Depends(get_usuario_logado)):
+    return templates.TemplateResponse("emprestimo.html", {"request": request, "usuario": usuario})
+
+
+@app.get("/livros_usuario_json")
+def livros_usuario_json(db: Session = Depends(get_db)):
+    livros = db.query(models.Livro).filter(models.Livro.disponibilidade == True).all()
+    return [{"id": l.id, "titulo": l.titulo} for l in livros]
+
+
+@app.get("/emprestimos")
+def listar_emprestimos(db: Session = Depends(get_db), usuario: Usuario = Depends(get_usuario_logado)):
+    emprestimos = db.query(models.Emprestimo).all()
+    return [
+        {
+            "id": e.id,
+            "usuario": {"id": e.usuario.id, "nome": e.usuario.nome},
+            "livro": {"id": e.livro.id, "titulo": e.livro.titulo},
+            "data_emprestimo": e.data_emprestimo,
+            "data_devolucao": e.data_devolucao,
+            "eh_do_usuario_logado": e.usuario_id == usuario.id
+        }
+        for e in emprestimos
+    ]
+
+#EMPRESTIMO ----------------------------------
+
+@app.post("/emprestimo")
+def criar_emprestimo(
+    livro: int,
+    data_emprestimo: str,
+    data_devolucao: str,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_logado)
+):
+    livro_obj = db.query(models.Livro).filter(models.Livro.id == livro).first()
+    if not livro_obj or not livro_obj.disponibilidade:
+        raise HTTPException(status_code=400, detail="Livro não disponível")
+
+    novo = models.Emprestimo(
+        usuario_id=usuario.id,
+        livro_id=livro,
+        data_emprestimo=datetime.strptime(data_emprestimo, "%Y-%m-%d"),
+        data_devolucao=datetime.strptime(data_devolucao, "%Y-%m-%d")
+    )
+
+    livro_obj.disponibilidade = False
+    db.add(novo)
+    db.commit()
+
+    return "Empréstimo realizado com sucesso!"
+
+
+@app.delete("/emprestimo/{emprestimo_id}")
+def cancelar_emprestimo(emprestimo_id: int, db: Session = Depends(get_db), usuario: Usuario = Depends(get_usuario_logado)):
+    emprestimo = db.query(models.Emprestimo).filter(models.Emprestimo.id == emprestimo_id).first()
+    if not emprestimo:
+        raise HTTPException(status_code=404, detail="Empréstimo não encontrado")
+    if emprestimo.usuario_id != usuario.id and not usuario.is_admin:
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    livro = emprestimo.livro
+    livro.disponibilidade = True
+    db.delete(emprestimo)
+    db.commit()
+    return {"detail": "Empréstimo cancelado com sucesso"}
+
+
+@app.put("/emprestimo/{emprestimo_id}")
+def editar_emprestimo(emprestimo_id: int, payload: dict = Body(...), db: Session = Depends(get_db), usuario: Usuario = Depends(get_usuario_logado)):
+    emprestimo = db.query(models.Emprestimo).filter(models.Emprestimo.id == emprestimo_id).first()
+    if not emprestimo:
+        raise HTTPException(status_code=404, detail="Empréstimo não encontrado")
+    if emprestimo.usuario_id != usuario.id and not usuario.is_admin:
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    nova_data = payload.get("nova_data_devolucao")
+    if not nova_data:
+        raise HTTPException(status_code=400, detail="Nova data inválida")
+
+    emprestimo.data_devolucao = datetime.strptime(nova_data, "%Y-%m-%d")
+    db.commit()
+    return {"detail": "Data de devolução atualizada"}
 
 
 app.include_router(router)

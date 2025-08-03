@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Livros Disponíveis - Letria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDFDFD;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #4B3F72;
+      font-size: 1.8rem;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .livro-card {
+      display: flex;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .livro-card img {
+      width: 150px;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .livro-info {
+      padding: 1rem;
+      flex: 1;
+    }
+
+    .livro-info h2 {
+      font-family: 'Playfair Display', serif;
+      color: #4B3F72;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .livro-info p {
+      margin: 0.3rem 0;
+    }
+
+    .livro-info form {
+      margin-top: 1rem;
+    }
+
+    button {
+      background-color: #4B3F72;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #3a315d;
+    }
+
+    .voltar {
+      display: block;
+      width: fit-content;
+      margin: 2rem auto 1rem auto;
+      padding: 0.5rem 1rem;
+      background-color: #6C5B7B;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .voltar:hover {
+      background-color: #5A4E69;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Livros Disponíveis</h1>
+</header>
+
+<div class="container">
+
+  {% for livro in livros %}
+  <div class="livro-card">
+    {% if livro.capa_url %}
+      <img src="{{ livro.capa_url }}" alt="Capa de {{ livro.titulo }}">
+    {% else %}
+      <img src="/static/imagens/capa_padrao.jpg" alt="Capa padrão">
+    {% endif %}
+    <div class="livro-info">
+      <h2>{{ livro.titulo }}</h2>
+      <p><strong>Autor:</strong> {{ livro.autor.nome }}</p>
+      <p><strong>Ano:</strong> {{ livro.ano_publicacao }}</p>
+      <p><strong>Gênero:</strong> {{ livro.genero }}</p>
+      <p><strong>Descrição:</strong> {{ livro.descricao or "Sem descrição." }}</p>
+
+      <form method="get" action="/emprestimo">
+        <input type="hidden" name="livro_id" value="{{ livro.id }}">
+        <button type="submit">Emprestar</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<a href="/dashboard_usuario" class="voltar">Voltar ao Dashboard</a>
+
+</body>
+</html>
